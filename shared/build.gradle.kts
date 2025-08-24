@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.lint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.skie)
 }
 
 kotlin {

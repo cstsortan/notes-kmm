@@ -1,6 +1,6 @@
 package com.example.notesapp.di
 
-import com.example.notesapp.ui.viewmodel.EditNoteViewModel
+import com.example.notesapp.ui.viewmodel.editnote.EditNoteViewModel
 import com.example.notesapp.ui.viewmodel.NotesViewModel
 import com.example.notesapp.ui.viewmodel.addnote.AddNoteViewModel
 import org.koin.core.module.dsl.viewModel

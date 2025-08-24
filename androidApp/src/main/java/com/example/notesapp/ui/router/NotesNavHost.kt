@@ -9,14 +9,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.notesapp.ui.screens.AddNoteScreen
 import com.example.notesapp.ui.viewmodel.addnote.AddNoteViewModel
 import com.example.notesapp.ui.screens.EditNoteScreen
-import com.example.notesapp.ui.viewmodel.EditNoteViewModel
+import com.example.notesapp.ui.viewmodel.editnote.EditNoteViewModel
 import com.example.notesapp.ui.screens.NotesScreen
 import com.example.notesapp.ui.viewmodel.NotesViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NotesNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(navController = navController, startDestination = Screen.Notes) {

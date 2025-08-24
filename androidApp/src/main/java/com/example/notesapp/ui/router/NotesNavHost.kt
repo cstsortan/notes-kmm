@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.notesapp.ui.screens.AddNoteScreen
-import com.example.notesapp.ui.viewmodel.AddNoteViewModel
+import com.example.notesapp.ui.viewmodel.addnote.AddNoteViewModel
 import com.example.notesapp.ui.screens.EditNoteScreen
 import com.example.notesapp.ui.viewmodel.EditNoteViewModel
 import com.example.notesapp.ui.screens.NotesScreen

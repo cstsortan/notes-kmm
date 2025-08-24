@@ -17,17 +17,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.notesapp.ui.viewmodel.addnote.AddNoteViewModel
 import com.example.notesapp.ui.viewmodel.addnote.AddNoteUiState
 import com.example.notesapp.ui.viewmodel.addnote.AddNoteAction
+import com.example.notesapp.ui.viewmodel.addnote.AddNoteUiEffect
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,8 +44,27 @@ fun AddNoteScreen(
     onPop: () -> Unit = {},
 ) {
     val uiState by addNoteViewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(addNoteViewModel.uiEffects) {
+        addNoteViewModel.uiEffects.collectLatest { effect ->
+            when (effect) {
+                is AddNoteUiEffect.NavigateBack -> onPop()
+                is AddNoteUiEffect.ShowError -> {
+                    snackbarHostState.showSnackbar(
+                        message = effect.message
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -87,7 +113,6 @@ fun AddNoteScreen(
                         Button(
                             onClick = {
                                 addNoteViewModel.onAction(AddNoteAction.SaveNote)
-                                onPop()
                             },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = state.noteTitle.isNotBlank()
@@ -96,6 +121,7 @@ fun AddNoteScreen(
                         }
                     }
                 }
+
                 is AddNoteUiState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -104,6 +130,7 @@ fun AddNoteScreen(
                         CircularProgressIndicator()
                     }
                 }
+
                 is AddNoteUiState.Error -> {
                     Column(
                         modifier = Modifier.padding(16.dp),

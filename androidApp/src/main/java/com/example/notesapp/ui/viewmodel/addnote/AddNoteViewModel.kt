@@ -6,7 +6,10 @@ import com.example.shared.repository.NotesRepository
 import com.example.shared.models.CreateNote
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel(
@@ -14,6 +17,9 @@ class AddNoteViewModel(
 ): ViewModel() {
     private val _uiState = MutableStateFlow<AddNoteUiState>(AddNoteUiState.Content())
     val uiState: StateFlow<AddNoteUiState> = _uiState.asStateFlow()
+    
+    private val _uiEffects = MutableSharedFlow<AddNoteUiEffect>()
+    val uiEffects: SharedFlow<AddNoteUiEffect> = _uiEffects.asSharedFlow()
 
     fun onAction(action: AddNoteAction) {
         when (action) {
@@ -54,8 +60,10 @@ class AddNoteViewModel(
                 try {
                     notesRepository.addNote(CreateNote(currentState.noteTitle, currentState.noteContent))
                     _uiState.value = AddNoteUiState.Content()
+                    _uiEffects.emit(AddNoteUiEffect.NavigateBack)
                 } catch (e: Exception) {
                     _uiState.value = AddNoteUiState.Error(e.message ?: "Unknown error occurred")
+                    _uiEffects.emit(AddNoteUiEffect.ShowError(e.message ?: "Unknown error occurred"))
                 }
             }
         }

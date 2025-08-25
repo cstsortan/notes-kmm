@@ -1,20 +1,20 @@
 package com.example.notesapp.ui.viewmodel.addnote
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shared.repository.NotesRepository
 import com.example.shared.models.CreateNote
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import com.example.shared.repository.NotesRepository
+import com.example.shared.viewmodels.base.ViewModelBase
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AddNoteViewModel(
     val notesRepository: NotesRepository
-): ViewModel() {
+): ViewModelBase() {
     private val _uiState = MutableStateFlow<AddNoteUiState>(AddNoteUiState.Content())
     val uiState: StateFlow<AddNoteUiState> = _uiState.asStateFlow()
     

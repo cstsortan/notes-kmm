@@ -1,25 +1,25 @@
 package com.example.notesapp.ui.viewmodel.editnote
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.shared.repository.NotesRepository
-import com.example.shared.models.CreateNote
 import com.example.notesapp.ui.router.Screen
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import com.example.shared.models.CreateNote
+import com.example.shared.repository.NotesRepository
+import com.example.shared.viewmodels.base.ViewModelBase
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class EditNoteViewModel(
     savedStateHandle: SavedStateHandle,
     val notesRepository: NotesRepository
-) : ViewModel() {
+) : ViewModelBase() {
 
     private val noteId = savedStateHandle.toRoute<Screen.EditNote>().id
 

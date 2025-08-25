@@ -1,9 +1,5 @@
-package com.example.notesapp.ui.viewmodel.editnote
+package com.example.shared.viewmodels.editnote
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
-import com.example.notesapp.ui.router.Screen
 import com.example.shared.models.CreateNote
 import com.example.shared.repository.NotesRepository
 import com.example.shared.viewmodels.base.ViewModelBase
@@ -17,11 +13,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class EditNoteViewModel(
-    savedStateHandle: SavedStateHandle,
+    val noteId: Int,
     val notesRepository: NotesRepository
 ) : ViewModelBase() {
-
-    private val noteId = savedStateHandle.toRoute<Screen.EditNote>().id
 
     private val _uiState = MutableStateFlow<EditNoteUiState>(EditNoteUiState.Loading)
     val uiState: StateFlow<EditNoteUiState> = _uiState.asStateFlow()
@@ -40,7 +34,7 @@ class EditNoteViewModel(
     }
 
     private fun initialize() {
-        viewModelScope.launch {
+        scope.launch {
             try {
                 val note = notesRepository.getNote(noteId).first()
                 if (note != null) {
@@ -85,7 +79,7 @@ class EditNoteViewModel(
         if (currentState is EditNoteUiState.Content) {
             _uiState.value = EditNoteUiState.Loading
             
-            viewModelScope.launch {
+            scope.launch {
                 try {
                     notesRepository.updateNote(
                         id = noteId,

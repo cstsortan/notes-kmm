@@ -22,7 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.shared.models.Note
-import com.example.notesapp.ui.viewmodel.NotesViewModel
+import com.example.shared.viewmodels.NotesViewModel
 import com.example.shared.platform
 
 

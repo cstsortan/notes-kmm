@@ -1,18 +1,19 @@
 package com.example.notesapp.ui.router
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.notesapp.ui.screens.AddNoteScreen
-import com.example.notesapp.ui.viewmodel.addnote.AddNoteViewModel
 import com.example.notesapp.ui.screens.EditNoteScreen
-import com.example.notesapp.ui.viewmodel.editnote.EditNoteViewModel
 import com.example.notesapp.ui.screens.NotesScreen
-import com.example.notesapp.ui.viewmodel.NotesViewModel
+import com.example.shared.viewmodels.NotesViewModel
+import com.example.shared.viewmodels.addnote.AddNoteViewModel
+import com.example.shared.viewmodels.editnote.EditNoteViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NotesNavHost(
@@ -39,9 +40,10 @@ fun NotesNavHost(
             )
         }
         composable<Screen.EditNote> { backStackEntry ->
-            val editNoteViewModel: EditNoteViewModel = koinViewModel()
+            val editNoteViewModel: EditNoteViewModel = koinViewModel(
+                parameters = { parametersOf(backStackEntry.toRoute<Screen.EditNote>().id) }
+            )
             EditNoteScreen(
-                noteId = backStackEntry.id,
                 editNoteViewModel = editNoteViewModel,
                 onPop = { navController.popBackStack() }
             )

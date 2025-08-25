@@ -1,6 +1,5 @@
-package com.example.notesapp.ui.viewmodel.addnote
+package com.example.shared.viewmodels.addnote
 
-import androidx.lifecycle.viewModelScope
 import com.example.shared.models.CreateNote
 import com.example.shared.repository.NotesRepository
 import com.example.shared.viewmodels.base.ViewModelBase
@@ -56,7 +55,7 @@ class AddNoteViewModel(
         if (currentState is AddNoteUiState.Content) {
             _uiState.value = AddNoteUiState.Loading
             
-            viewModelScope.launch {
+            scope.launch {
                 val result = notesRepository.addNote(CreateNote(currentState.noteTitle, currentState.noteContent))
                 result.fold(
                     onSuccess = {

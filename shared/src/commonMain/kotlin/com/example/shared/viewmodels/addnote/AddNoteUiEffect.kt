@@ -1,4 +1,4 @@
-package com.example.notesapp.ui.viewmodel.addnote
+package com.example.shared.viewmodels.addnote
 
 sealed class AddNoteUiEffect {
     object NavigateBack : AddNoteUiEffect()

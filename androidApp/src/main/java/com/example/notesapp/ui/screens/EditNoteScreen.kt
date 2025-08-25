@@ -29,27 +29,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.notesapp.ui.viewmodel.editnote.EditNoteViewModel
-import com.example.notesapp.ui.viewmodel.editnote.EditNoteUiState
-import com.example.notesapp.ui.viewmodel.editnote.EditNoteAction
-import com.example.notesapp.ui.viewmodel.editnote.EditNoteUiEffect
+import com.example.shared.viewmodels.editnote.EditNoteAction
+import com.example.shared.viewmodels.editnote.EditNoteUiEffect
+import com.example.shared.viewmodels.editnote.EditNoteUiState
+import com.example.shared.viewmodels.editnote.EditNoteViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditNoteScreen(
     modifier: Modifier = Modifier,
-    noteId: String,
     onPop: () -> Unit = {},
     editNoteViewModel: EditNoteViewModel,
 ) {
     val uiState by editNoteViewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(noteId) {
+    LaunchedEffect(editNoteViewModel.noteId) {
         editNoteViewModel.onAction(EditNoteAction.Initialize)
     }
-    
+
     LaunchedEffect(editNoteViewModel.uiEffects) {
         editNoteViewModel.uiEffects.collectLatest { effect ->
             when (effect) {
@@ -121,6 +120,7 @@ fun EditNoteScreen(
                         }
                     }
                 }
+
                 is EditNoteUiState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -129,6 +129,7 @@ fun EditNoteScreen(
                         CircularProgressIndicator()
                     }
                 }
+
                 is EditNoteUiState.Error -> {
                     Column(
                         modifier = Modifier.padding(16.dp),

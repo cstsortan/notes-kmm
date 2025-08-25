@@ -1,4 +1,4 @@
-package com.example.notesapp.ui.viewmodel.editnote
+package com.example.shared.viewmodels.editnote
 
 sealed class EditNoteUiEffect {
     object NavigateBack : EditNoteUiEffect()

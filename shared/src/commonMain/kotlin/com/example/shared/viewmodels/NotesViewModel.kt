@@ -1,6 +1,5 @@
-package com.example.notesapp.ui.viewmodel
+package com.example.shared.viewmodels
 
-import androidx.lifecycle.viewModelScope
 import com.example.shared.models.Note
 import com.example.shared.repository.NotesRepository
 import com.example.shared.viewmodels.base.ViewModelBase
@@ -13,7 +12,7 @@ class NotesViewModel(
 ) : ViewModelBase() {
 
     val notes: StateFlow<List<Note>> = notesRepository.getNotes().stateIn(
-        viewModelScope,
+        scope,
         SharingStarted.Lazily, emptyList()
     )
 }

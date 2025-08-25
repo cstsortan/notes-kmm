@@ -142,7 +142,7 @@ Room database with multiplatform support:
 4. **Run iOS App** (macOS only)
    ```bash
    ./gradlew :shared:podInstall
-   # Open iosApp/iosApp.xcodeproj in Xcode
+   # Open iosApp/Notes.xcodeproj in Xcode
    ```
 
 ### Build Configurations

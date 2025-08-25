@@ -23,22 +23,32 @@ class NotesRepositoryImpl(
         }
     }
 
-    override suspend fun addNote(note: CreateNote) {
-        return notesDao.insertNote(
-            title = note.title,
-            content = note.description
-        )
+    override suspend fun addNote(note: CreateNote): Result<Unit> {
+        return try {
+            notesDao.insertNote(
+                title = note.title,
+                content = note.description
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun updateNote(
         id: Int,
         note: CreateNote
-    ) {
-        return notesDao.updateNote(
-            id = id,
-            title = note.title,
-            content = note.description
-        )
+    ): Result<Unit> {
+        return try {
+            notesDao.updateNote(
+                id = id,
+                title = note.title,
+                content = note.description
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
 

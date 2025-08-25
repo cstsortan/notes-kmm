@@ -57,14 +57,18 @@ class AddNoteViewModel(
             _uiState.value = AddNoteUiState.Loading
             
             viewModelScope.launch {
-                try {
-                    notesRepository.addNote(CreateNote(currentState.noteTitle, currentState.noteContent))
-                    _uiState.value = AddNoteUiState.Content()
-                    _uiEffects.emit(AddNoteUiEffect.NavigateBack)
-                } catch (e: Exception) {
-                    _uiState.value = AddNoteUiState.Error(e.message ?: "Unknown error occurred")
-                    _uiEffects.emit(AddNoteUiEffect.ShowError(e.message ?: "Unknown error occurred"))
-                }
+                val result = notesRepository.addNote(CreateNote(currentState.noteTitle, currentState.noteContent))
+                result.fold(
+                    onSuccess = {
+                        _uiState.value = AddNoteUiState.Content()
+                        _uiEffects.emit(AddNoteUiEffect.NavigateBack)
+                    },
+                    onFailure = { exception ->
+                        val errorMessage = exception.message ?: "Unknown error occurred"
+                        _uiState.value = AddNoteUiState.Error(errorMessage)
+                        _uiEffects.emit(AddNoteUiEffect.ShowError(errorMessage))
+                    }
+                )
             }
         }
     }

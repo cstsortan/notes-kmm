@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.map
 interface NotesRepository {
     fun getNotes(): Flow<List<Note>>
     fun getNote(id: Int): Flow<Note?>
-    suspend fun addNote(note: CreateNote)
-    suspend fun updateNote(id: Int, note: CreateNote)
+    suspend fun addNote(note: CreateNote): Result<Unit>
+    suspend fun updateNote(id: Int, note: CreateNote): Result<Unit>
 }
 
 class InMemoryNotesRepository : NotesRepository {
@@ -28,26 +28,36 @@ class InMemoryNotesRepository : NotesRepository {
         }
     }
 
-    override suspend fun addNote(note: CreateNote) {
-        val newNote = Note(
-            id = notes.value.size + 1,
-            title = note.title,
-            description = note.description
-        )
-        notes.value = notes.value + newNote
+    override suspend fun addNote(note: CreateNote): Result<Unit> {
+        return try {
+            val newNote = Note(
+                id = notes.value.size + 1,
+                title = note.title,
+                description = note.description
+            )
+            notes.value = notes.value + newNote
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    override suspend fun updateNote(id: Int, note: CreateNote) {
-        notes.value = notes.value.map {
-            if (it.id == id) {
-                Note(
-                    id = it.id,
-                    title = note.title,
-                    description = note.description
-                )
-            } else {
-                it
+    override suspend fun updateNote(id: Int, note: CreateNote): Result<Unit> {
+        return try {
+            notes.value = notes.value.map {
+                if (it.id == id) {
+                    Note(
+                        id = it.id,
+                        title = note.title,
+                        description = note.description
+                    )
+                } else {
+                    it
+                }
             }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

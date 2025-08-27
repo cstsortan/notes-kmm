@@ -1,4 +1,4 @@
-package com.example.notesapp.di
+package com.example.shared.di
 
 import com.example.shared.repository.NotesRepository
 import com.example.shared.repository.NotesRepositoryImpl

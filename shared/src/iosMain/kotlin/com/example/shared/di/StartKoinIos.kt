@@ -1,5 +1,9 @@
 package com.example.shared.di
 
 fun startKoinIos() {
-    initKoin {}
+    initKoin {
+        modules(listOf(
+            databaseModuleIos
+        ))
+    }
 }

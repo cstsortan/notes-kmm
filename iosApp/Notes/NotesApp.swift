@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import sharedKit
 
 @main
 struct NotesApp: App {
+    init() {
+        startKoinIos()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()

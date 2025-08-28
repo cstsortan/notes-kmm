@@ -52,6 +52,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FFCCC002E5B2942009A0372 /* Build configuration list for PBXNativeTarget "Notes" */;
 			buildPhases = (
+				2F898FBF2E60C61000EFD8C7 /* Add KMP */,
 				2FFCCBF02E5B2940009A0372 /* Sources */,
 				2FFCCBF12E5B2940009A0372 /* Frameworks */,
 				2FFCCBF22E5B2940009A0372 /* Resources */,
@@ -113,6 +114,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2F898FBF2E60C61000EFD8C7 /* Add KMP */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Add KMP";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2FFCCBF02E5B2940009A0372 /* Sources */ = {

@@ -29,10 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.shared.viewmodels.addnote.AddNoteViewModel
-import com.example.shared.viewmodels.addnote.AddNoteUiState
 import com.example.shared.viewmodels.addnote.AddNoteAction
 import com.example.shared.viewmodels.addnote.AddNoteUiEffect
+import com.example.shared.viewmodels.addnote.AddNoteUiState
+import com.example.shared.viewmodels.addnote.AddNoteViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +71,9 @@ fun AddNoteScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = onPop
+                        onClick = {
+                            addNoteViewModel.onAction(AddNoteAction.Cancel)
+                        }
                     ) {
                         Icon(
                             Icons.AutoMirrored.Default.ArrowBack,

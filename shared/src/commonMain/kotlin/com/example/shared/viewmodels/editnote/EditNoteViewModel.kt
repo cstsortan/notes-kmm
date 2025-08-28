@@ -40,7 +40,7 @@ class EditNoteViewModel(
                 if (note != null) {
                     _uiState.value = EditNoteUiState.Content(
                         noteTitle = note.title,
-                        noteContent = note.description
+                        noteContent = note.content
                     )
                 } else {
                     _uiState.value = EditNoteUiState.Error("Note not found")

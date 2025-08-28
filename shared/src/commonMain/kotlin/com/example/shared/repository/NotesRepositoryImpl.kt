@@ -56,6 +56,6 @@ private fun NoteEntity.toNote(): Note {
     return Note(
         id = id,
         title = title,
-        description = content
+        content = content
     )
 }

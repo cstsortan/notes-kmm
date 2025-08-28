@@ -5,4 +5,5 @@ sealed class AddNoteAction {
     data class UpdateContent(val content: String) : AddNoteAction()
     object ClearFields : AddNoteAction()
     object SaveNote : AddNoteAction()
+    object Cancel : AddNoteAction()
 }

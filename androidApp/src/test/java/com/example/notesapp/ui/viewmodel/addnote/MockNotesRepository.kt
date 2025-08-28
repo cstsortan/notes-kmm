@@ -39,7 +39,7 @@ class MockNotesRepository : NotesRepository {
         val newNote = Note(
             id = notes.size + 1,
             title = note.title,
-            description = note.description
+            content = note.description
         )
         notes.add(newNote)
         return Result.success(Unit)
@@ -55,7 +55,7 @@ class MockNotesRepository : NotesRepository {
             notes[index] = Note(
                 id = id,
                 title = note.title,
-                description = note.description
+                content = note.description
             )
         }
         return Result.success(Unit)

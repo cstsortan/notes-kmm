@@ -26,6 +26,13 @@ class AddNoteViewModel(
             is AddNoteAction.UpdateContent -> updateContent(action.content)
             is AddNoteAction.ClearFields -> clearFields()
             is AddNoteAction.SaveNote -> saveNote()
+            is AddNoteAction.Cancel -> cancel()
+        }
+    }
+
+    private fun cancel() {
+        scope.launch { 
+            _uiEffects.emit(AddNoteUiEffect.NavigateBack)
         }
     }
 

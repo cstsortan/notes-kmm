@@ -22,8 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.shared.models.Note
-import com.example.shared.viewmodels.NotesViewModel
 import com.example.shared.platform
+import com.example.shared.viewmodels.NotesViewModel
 
 
 @Composable
@@ -45,7 +45,7 @@ fun NoteItem(
             .padding(8.dp)
     ) {
         Text(text = note.title, style = MaterialTheme.typography.titleMedium)
-        Text(text = note.description, style = MaterialTheme.typography.bodyMedium)
+        Text(text = note.content, style = MaterialTheme.typography.bodyMedium)
     }
 }
 

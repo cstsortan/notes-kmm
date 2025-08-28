@@ -10,7 +10,6 @@ import Foundation
 @Observable
 class NotesModel {
     private let vm = DI().getNotesViewModel()
-    private let repo = DI().getNotesRepository()
     
     var state: [Note] = []
     

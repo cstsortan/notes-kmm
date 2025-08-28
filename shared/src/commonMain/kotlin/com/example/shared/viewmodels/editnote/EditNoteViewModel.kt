@@ -30,6 +30,13 @@ class EditNoteViewModel(
             is EditNoteAction.ClearFields -> clearFields()
             is EditNoteAction.SaveNote -> saveNote()
             is EditNoteAction.Initialize -> initialize()
+            is EditNoteAction.Cancel -> cancel()
+        }
+    }
+
+    private fun cancel() {
+        scope.launch {
+            _uiEffects.emit(EditNoteUiEffect.NavigateBack)
         }
     }
 

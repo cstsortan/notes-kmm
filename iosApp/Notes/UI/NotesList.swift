@@ -10,38 +10,49 @@ import sharedKit
 
 struct NotesListView: View {
     var notes: [Note] = []
+    @Binding var selectedNote: Note?
     
     var body: some View {
-        List(notes, id: \.id) { note in
-            NoteListItem(note: note)
+        List(notes, id: \.id, selection: $selectedNote) { note in
+            NoteListItem(note: note, onClick: {
+                selectedNote = note
+            })
         }
     }
 }
 
 struct NotesListPage: View {
     @State private var vm = NotesModel()
-    @State private var addNoteFormOpen = false
     
     var body: some View {
         NavigationView {
-            NotesListView(notes: vm.state)
+            NotesListView(notes: vm.state, selectedNote: $vm.selectedNote)
                 .navigationTitle("Notes")
                 .toolbar {
                     ToolbarItem(placement: .automatic) {
                         Button {
-                            addNoteFormOpen = true
+                            vm.addNoteFormOpen = true
                         } label: {
                             Text("Add Note")
                         }
                     }
                 }
-                .sheet(isPresented: $addNoteFormOpen) {
+                .sheet(isPresented: $vm.addNoteFormOpen) {
                     NavigationView {
                         AddNote(
-                            onDismiss: {addNoteFormOpen = false}
+                            onDismiss: {vm.addNoteFormOpen = false}
                         )
                     }
                 }
+                .sheet(item: $vm.selectedNote) { note in
+                    NavigationView {
+                        EditNote(
+                            noteId: Int64(note.id),
+                            onDismiss: {vm.addNoteFormOpen = false}
+                        )
+                    }
+                }
+                
         }
     }
     
@@ -49,12 +60,17 @@ struct NotesListPage: View {
 
 struct NoteListItem: View {
     let note: Note
+    let onClick: () -> Void
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(note.title)
-                .font(.headline)
-            Text(note.content)
-                .font(.body)
+        Button {
+            onClick()
+        } label: {
+            VStack(alignment: .leading) {
+                Text(note.title)
+                    .font(.headline)
+                Text(note.content)
+                    .font(.body)
+            }
         }
     }
 }
@@ -64,7 +80,9 @@ struct NoteListItem: View {
         Note(id: 1, title: "test1", content: "desc1"),
         Note(id: 2, title: "test2", content: "desc2"),
     ]
-    return NotesListView(
-         notes: notes
+    NotesListView(
+         notes: notes,
+         selectedNote: Binding(get: {nil}, set: {_ in})
+         
     )
 }

@@ -6,4 +6,5 @@ sealed class EditNoteAction {
     object ClearFields : EditNoteAction()
     object SaveNote : EditNoteAction()
     object Initialize : EditNoteAction()
+    object Cancel : EditNoteAction()
 }

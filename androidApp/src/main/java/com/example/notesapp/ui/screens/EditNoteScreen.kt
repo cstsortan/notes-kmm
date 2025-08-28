@@ -73,7 +73,9 @@ fun EditNoteScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = "Edit Note") },
                 navigationIcon = {
-                    IconButton(onClick = onPop) {
+                    IconButton(onClick = {
+                        editNoteViewModel.onAction(EditNoteAction.Cancel)
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = "Back"

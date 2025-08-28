@@ -11,6 +11,9 @@ import Foundation
 class NotesModel {
     private let vm = DI().getNotesViewModel()
     
+    var addNoteFormOpen = false
+    var selectedNote: Note? = nil
+    
     var state: [Note] = []
     
     init() {
@@ -21,3 +24,5 @@ class NotesModel {
         }
     }
 }
+
+extension Note: @retroactive Identifiable {}

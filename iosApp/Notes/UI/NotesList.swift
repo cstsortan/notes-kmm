@@ -23,9 +23,6 @@ struct NotesListPage: View {
     
     var body: some View {
         NotesListView(notes: vm.state)
-        .task {
-            await vm.startObserver()
-        }
     }
     
 }

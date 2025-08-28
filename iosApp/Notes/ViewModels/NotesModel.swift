@@ -14,10 +14,11 @@ class NotesModel {
     
     var state: [Note] = []
     
-    @MainActor
-    func startObserver() async {
-        for await notes in vm.notes {
-            self.state = notes
+    init() {
+        Task {
+            for await notes in vm.notes {
+                self.state = notes
+            }
         }
     }
 }

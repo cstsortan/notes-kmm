@@ -28,12 +28,121 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.example.shared.viewmodels.addnote.AddNoteAction
 import com.example.shared.viewmodels.addnote.AddNoteUiEffect
 import com.example.shared.viewmodels.addnote.AddNoteUiState
 import com.example.shared.viewmodels.addnote.AddNoteViewModel
 import kotlinx.coroutines.flow.collectLatest
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddNoteView(modifier: Modifier = Modifier,
+                state: AddNoteUiState,
+                snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+                onAction: (AddNoteAction) -> Unit = {}) {
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                snackbarHostState
+            )
+        },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "Add Note")
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            onAction(AddNoteAction.Cancel)
+                        }
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+
+        Box(
+            modifier = modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            when (val state = state) {
+                is AddNoteUiState.Content -> {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        TextField(
+                            value = state.noteTitle,
+                            onValueChange = {
+                                onAction(AddNoteAction.UpdateTitle(it))
+                            },
+                            label = { Text("Title") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextField(
+                            value = state.noteContent,
+                            onValueChange = {
+                                onAction(AddNoteAction.UpdateContent(it))
+                            },
+                            label = { Text("Description") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = {
+                                onAction(AddNoteAction.SaveNote)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = state.noteTitle.isNotBlank()
+                        ) {
+                            Text("Add Note")
+                        }
+                    }
+                }
+
+                is AddNoteUiState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is AddNoteUiState.Error -> {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Error: ${state.message}",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = {
+                                onAction(AddNoteAction.ClearFields)
+                            }
+                        ) {
+                            Text("Try Again")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,100 +167,43 @@ fun AddNoteScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                snackbarHostState
-            )
-        },
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(text = "Add Note")
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            addNoteViewModel.onAction(AddNoteAction.Cancel)
-                        }
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-
-        Box(
-            modifier = modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
-            when (val state = uiState) {
-                is AddNoteUiState.Content -> {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        TextField(
-                            value = state.noteTitle,
-                            onValueChange = {
-                                addNoteViewModel.onAction(AddNoteAction.UpdateTitle(it))
-                            },
-                            label = { Text("Title") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TextField(
-                            value = state.noteContent,
-                            onValueChange = {
-                                addNoteViewModel.onAction(AddNoteAction.UpdateContent(it))
-                            },
-                            label = { Text("Description") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = {
-                                addNoteViewModel.onAction(AddNoteAction.SaveNote)
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = state.noteTitle.isNotBlank()
-                        ) {
-                            Text("Add Note")
-                        }
-                    }
-                }
-
-                is AddNoteUiState.Loading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                is AddNoteUiState.Error -> {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Error: ${state.message}",
-                            color = MaterialTheme.colorScheme.error
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = {
-                                addNoteViewModel.onAction(AddNoteAction.ClearFields)
-                            }
-                        ) {
-                            Text("Try Again")
-                        }
-                    }
-                }
-            }
-        }
-    }
+    AddNoteView(
+        modifier = modifier,
+        state = uiState,
+        onAction = addNoteViewModel::onAction,
+        snackbarHostState = snackbarHostState
+    )
 }
+
+@Preview
+@Composable
+private fun AddNoteViewPreviewContent(
+    @PreviewParameter(AddNoteViewPreviewProvider::class) state: AddNoteUiState
+) {
+    AddNoteView(
+        state = state
+    )
+}
+
+private class AddNoteViewPreviewProvider : CollectionPreviewParameterProvider<AddNoteUiState>(
+    listOf(
+        AddNoteUiState.Content(
+            noteTitle = "",
+            noteContent = ""
+        ),
+        AddNoteUiState.Content(
+            noteTitle = "",
+            noteContent = "Sample Content"
+        ),
+        AddNoteUiState.Content(
+            noteTitle = "Sample Title",
+            noteContent = ""
+        ),
+        AddNoteUiState.Content(
+            noteTitle = "Sample Title",
+            noteContent = "Sample Content"
+        ),
+        AddNoteUiState.Loading,
+        AddNoteUiState.Error("Sample error message")
+    )
+)

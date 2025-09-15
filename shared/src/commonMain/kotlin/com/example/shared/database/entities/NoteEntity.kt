@@ -7,7 +7,7 @@ import kotlin.native.ObjCName
 
 @OptIn(ExperimentalObjCName::class)
 @Entity(tableName = "notes")
-@ObjCName("FruittieEntityObjc")
+@ObjCName("NoteEntityObjc")
 data class NoteEntity(
     @PrimaryKey val id: Int,
     val title: String,
